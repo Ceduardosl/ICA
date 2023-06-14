@@ -11,13 +11,13 @@ def PCA(arr):
     #indivíduos (samples) nas colunas
     #Orientação contrária ao exigido pelo Scikit Learn
     results_PCA = namedtuple("PCA", ["components",
-                                    "explained_variance",
+                                    "variance",
                                     "explained_variance_ratio",
                                     "x_transf"])
     x_arr = arr - np.repeat(arr.mean(axis = 1).reshape(-1,1),
                         repeats = i_data.shape[1], axis = 1)
     cov_x = np.cov(x_arr)
-
+    print(cov_x.shape)
     w, v = np.linalg.eig(cov_x)
     sorted_idx = w.argsort()[::-1]
     w = w[sorted_idx]
@@ -28,7 +28,7 @@ def PCA(arr):
     ve = np.cumsum(w)/w.sum()
 
     return (results_PCA(components = v,
-                        explained_variance = w,
+                        variance = w,
                         explained_variance_ratio = ve,
                         x_transf = z))
 #%%
