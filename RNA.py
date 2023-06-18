@@ -14,6 +14,7 @@ o_data = np.loadtxt("Dados/derm_target.txt")
 eta = 0.01
 Ne = 100
 Nr = 10
+tx_ok = np.empty((1, Nr))
 #%%
 for r in range(Nr):
     rand_index = np.random.permutation(i_data.shape[1])
@@ -67,7 +68,8 @@ for r in range(Nr):
         if v_output[:,j].argmax() == Y.argmax():
             count += 1
 
-    print(count/v_input.shape[1])
+    # tx_ok.append(count/v_input.shape[1])
+    tx_ok[:,r] = count/v_input.shape[1]
 
 # %%
 fig, ax = plt.subplots(dpi = 600)
