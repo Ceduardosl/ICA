@@ -35,6 +35,7 @@ eta = 0.01
 Ne = 50
 Nr = 10
 tx_ok = np.empty((Nr))
+spt_point = 0.8 #split point 100*spt_point%
 best_dict = {"Acc_Best": 0, "W_best": 0}
 #%%
 for r in range(Nr):
@@ -44,7 +45,6 @@ for r in range(Nr):
     i_data = i_data[:, rand_index]
     o_data = o_data[:, rand_index]
    
-    spt_point = 0.8 #split point 100*spt_point%
     t_input = i_data[:,0:int(spt_point*i_data.shape[1])]
     t_output = o_data[:,0:int(spt_point*i_data.shape[1])]
     v_input = i_data[:,int(spt_point*i_data.shape[1]):]
@@ -54,7 +54,7 @@ for r in range(Nr):
     #q = número de neuronios
     #Inicialização Aleatória
     #W = q x (p+1)
-
+    #q = v_output.shape[0], pois se precisa de q saídas para comparar com o vetor alvo
     W = np.random.rand(v_output.shape[0], t_input.shape[0]+1)
 
     #Treino
