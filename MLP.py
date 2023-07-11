@@ -42,9 +42,6 @@ best_dict = {"Acc_Best": 0, "W_best": 0}
 #2 Camadas Ocultas
 #(p, q1, q2, c) =
 
-p = 5
-q1 = 13
-q2 = 13
 #%%
 
 rand_index = np.random.permutation(i_data.shape[1])
@@ -57,13 +54,38 @@ v_input = i_data[:,int(spt_point*i_data.shape[1]):]
 v_output = o_data[:,int(spt_point*o_data.shape[1]):]
 #%%
 
-W_i = np.random.rand(v_output.shape[0], t_input.shape[0]+1) 
+# W_i = np.random.rand(dict_q["q_i"], t_input.shape[0]+1) 
 
 #%%
+dict_q = {
+    0: 20,
+    1: 10,
+    2: v_output.shape[0]
+}
 dict_W = {}
-for i in range(2):
-    dict_W[i+1] = W_i
+for i in range(len(dict_q)):
+    if i == 0:
+        dict_W[i] = np.random.rand(dict_q[i], t_input.shape[0]+1)
+    else:
+        dict_W[i] = np.random.rand(dict_q[i], dict_q[i-1] + 1)
 
+
+
+#%%
+X = np.append(-1, t_input[:,1]) #add bias
+U = np.dot(dict_W[0], X)
+Y = act_fun(U, fun_type)
+#%%
+X = np.append(-1, t_input[:,1])
+for i in range(len(dict_q)):
+    U = np.dot(dict_W[i], X)
+    Y = act_fun(U, fun_type)
+    X = np.append(-1, Y)
+    if i == (len(dict_q)-1):
+        print("OK")
+        err = t_output[:,i] - Y
+        X = np.expand_dims(X, 1)
+        err = np.expand_dims(err, 1)
 # %%
 RMSE_plot = []
 for ep in range(Ne):
