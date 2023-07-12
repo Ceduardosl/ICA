@@ -32,8 +32,8 @@ if (act_fun == "tanh"):
 
 
 eta = 0.01
-Ne = 50
-Nr = 10
+Ne = 5
+Nr = 2
 tx_ok = np.empty((Nr))
 spt_point = 0.8 #split point 100*spt_point%
 best_dict = {"Acc_Best": 0, "W_best": 0}
@@ -72,6 +72,10 @@ for r in range(Nr):
 
             X = np.expand_dims(X, 1)
             err = np.expand_dims(err, 1)
+            print(err.shape)
+            print(X.shape)
+            print(np.dot(err, X.T).shape)
+            print(W.shape)
             RMSE = RMSE + 0.5*np.power(err, 2).sum()
             W = W + eta*np.dot(err, X.T)
         
