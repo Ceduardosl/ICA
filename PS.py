@@ -32,7 +32,7 @@ if (act_fun == "tanh"):
 
 
 eta = 0.01
-Ne = 5
+Ne = 50
 Nr = 2
 tx_ok = np.empty((Nr))
 spt_point = 0.8 #split point 100*spt_point%
