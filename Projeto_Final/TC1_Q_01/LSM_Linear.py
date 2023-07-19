@@ -37,42 +37,53 @@ def one_hot_enconding(y, n):
 # As operações matriciais apresentam ordem contrária ao apresentando nas notas de aula
 # Y = W*X (Nota de Aula) - Y = X*W (Presente Código)
 
+Nr = 10
 X, Y = MNIST_data.get_train_data()
-
+X_test, Y_test = MNIST_data.get_test_data()
+    
 if np.linalg.matrix_rank(X) == min(X.shape):
     print("Matrix de dados de Posto Completo")
 else:
     print("Matriz de dados de Posto Incompleto")
 
 Y = one_hot_enconding(Y, 10)
-
-if X.shape[0] != X.shape[1]:
-    W = np.linalg.lstsq(X,Y)[0]
-    # W = np.dot(np.linalg.pinv(X), Y)
-else:
-    W = np.linalg.solve(X,Y)[0]
-#%%
-
-X_test, Y_test = MNIST_data.get_test_data()
 Y_test = one_hot_enconding(Y_test, 10)
+#%%
+tx_ok = np.zeros(10)
+for i in range(Nr):
+    rand_index = np.random.permutation(X.shape[0])
+    X = X[rand_index,:]
+    Y = Y[rand_index,:]
 
-Y_mod = np.dot(X_test, W)
+    if X.shape[0] != X.shape[1]:
+        W = np.linalg.lstsq(X,Y)[0]
+        # W = np.dot(np.linalg.pinv(X), Y)
+    else:
+        W = np.linalg.solve(X,Y)[0]
 
-count_ok = 0
-for i in range(Y_mod.shape[0]):
-    if Y_mod[i,:].argmax() == Y_test[i,:].argmax():
-        count_ok += 1
+    Y_mod = np.dot(X_test, W)
 
-print("Taxa de acerto na fase de teste = {:.2%}".format(count_ok/Y_mod.shape[0]))
-print("Taxa de erro na fase de teste = {:.2%}".format(1-(count_ok/Y_mod.shape[0])))
+    count_ok = 0
+
+    for j in range(Y_mod.shape[0]):
+        if Y_mod[j,:].argmax() == Y_test[j,:].argmax():
+            count_ok += 1
+    
+    tx_ok[i] = count_ok/Y_mod.shape[0]
+
+print('''
+Taxa de acerto Média = {:.2%} \n
+Taxa de erro Média = {:.2%} \n
+Melhor Taxa de Acerto = {:.2%} \n
+Pior Taxa de Acerto = {:.2%} \n
+Desv. Pad. Taxa de Acerto = {:.2%}
+'''.format(tx_ok.mean(), 1-tx_ok.mean(),
+    tx_ok.max(), tx_ok.min(), tx_ok.std()))
+
 #%%
 
 
-
-
-
-
-a = np.reshape(x[10,:], (28, 28))
+a = np.reshape(X[5,:], (28, 28))
 fig, ax = plt.subplots(dpi = 600)
 ax.imshow(a, cmap = "Greys")
 # %%
