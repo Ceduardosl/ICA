@@ -15,6 +15,13 @@ def act_fun(u, fun):
         u = np.array(list(map(lambda x: 1/(1+np.exp(-x)), u)))
     
     return u 
+
+def std_data(df, std_ddof):
+    
+    for i in range(df.shape[0]):
+        df[i,:] = (df[i,:] - df[i,:].mean())/(df[i,:].std(ddof = std_ddof))
+
+    return df
 #%%
 #data = p (features) x n (samples)
 # fun_type = ["tanh", "step", "log"]
@@ -24,7 +31,8 @@ fun_type = "tanh"
 
 i_data = np.loadtxt("Dados/derm_input.txt")
 o_data = np.loadtxt("Dados/derm_target.txt")
-i_data = (i_data - i_data.mean(axis = 0))/(i_data.std(axis = 0))
+i_data = std_data(i_data, std_ddof = 1)
+
 
 if (act_fun == "tanh"):
     #a codificação da saída fica -1 e 1 para tangente hiperbólica
@@ -72,10 +80,7 @@ for r in range(Nr):
 
             X = np.expand_dims(X, 1)
             err = np.expand_dims(err, 1)
-            print(err.shape)
-            print(X.shape)
-            print(np.dot(err, X.T).shape)
-            print(W.shape)
+
             RMSE = RMSE + 0.5*np.power(err, 2).sum()
             W = W + eta*np.dot(err, X.T)
         
