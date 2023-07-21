@@ -31,6 +31,14 @@ def one_hot_enconding(y, n):
         y_enc[i, y[i]] = 1
 
     return y_enc
+
+def norm_data(df):
+    df_std = np.zeros(df.shape)
+
+    for i in range(df.shape[0]):
+        # df_std[i,:] = (df[i,:] - df[i,:].mean())/(df[i,:].std(ddof = std_ddof))
+        df_std[i,:] = (df[i,:] - df[i,:].min())/(df[i,:].max() - df[i,:].min())
+    return df_std
 #%%
 # O código está utilizando a orientação nxp
 # n é o número de amostras, p o número de característica
@@ -48,6 +56,9 @@ else:
 
 Y = one_hot_enconding(Y, 10)
 Y_test = one_hot_enconding(Y_test, 10)
+
+X = norm_data(X, 1)
+X_test = norm_data(X_test, 1)
 #%%
 tx_ok = np.zeros(10)
 for i in range(Nr):
