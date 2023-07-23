@@ -75,7 +75,7 @@ Y_test = one_hot_enconding(Y_test, 10)
 X = norm_data(X)
 X_test = norm_data(X_test)
 #%%
-Nr = 1
+Nr = 5
 fun_type = "log"
 eta = 0.01
 Ne = 50
