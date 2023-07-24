@@ -59,7 +59,7 @@ Y_test = one_hot_enconding(Y_test, 10)
 
 X = norm_data(X)
 X_test = norm_data(X_test)
-#%%
+
 tx_ok = np.zeros(10)
 for i in range(Nr):
     rand_index = np.random.permutation(X.shape[0])

@@ -1,8 +1,10 @@
 #%%
+from numba import jit
 import numpy as np
 from mnist import MNIST #https://pypi.org/project/python-mnist/#description
 import matplotlib.pyplot as plt
 import time
+
 
 class MNIST_data():
 
@@ -24,7 +26,7 @@ class MNIST_data():
         x, y = mndata.load_testing()
 
         return (np.array(x), np.array(y))
-
+    
 def one_hot_enconding(y, n):
 
     y_enc = np.zeros((y.shape[0], n))
@@ -55,7 +57,7 @@ def act_fun(u, fun):
     
     return u 
 
-#%%
+
 # O código está utilizando a orientação nxp
 # n é o número de amostras, p o número de característica
 # As operações matriciais apresentam ordem contrária ao apresentando nas notas de aula
@@ -74,12 +76,11 @@ Y_test = one_hot_enconding(Y_test, 10)
 
 X = norm_data(X)
 X_test = norm_data(X_test)
-#%%
-Nr = 5
+
+Nr = 1
 fun_type = "log"
 eta = 0.01
 Ne = 50
-Nr = 1
 tx_ok = np.empty((Nr))
 best_run = {"Acc_Best": 0, "W_best": 0}
 
@@ -87,7 +88,7 @@ if fun_type == "tanh":
     #codificação da saída fica -1 e 1 para tangente hiperbólica
     Y[Y == 0] = -1
     Y_test[Y == 0] = -1
-#%%
+
 t = time.process_time()
 for r in range(Nr):
     #Não embaralhei a cada rodada, pois os dados de treino sempre serão X e Y
@@ -118,10 +119,8 @@ for r in range(Nr):
         
         RMSE_ep[ep] = RMSE/X.shape[0]
 
-elapsed_time = time.process_time() - t
+print("Duração {} segundos".format(round(time.process_time() - t),2))
 
-
-#%%
 count = 0
 for j in range(X_test.shape[0]):
     x = np.append(-1, X_test[j,:])
