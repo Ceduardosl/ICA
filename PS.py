@@ -25,12 +25,12 @@ def std_data(df, std_ddof):
 #%%
 #data = p (features) x n (samples)
 # fun_type = ["tanh", "step", "log"]
-fun_type = "tanh"
+# fun_type = "tanh"
 # fun_type = "step"
-# fun_type = "log"
+fun_type = "log"
 
-i_data = np.loadtxt("Dados/derm_input.txt")
-o_data = np.loadtxt("Dados/derm_target.txt")
+i_data = np.loadtxt("Dados/wine_input.txt")
+o_data = np.loadtxt("Dados/wine_target.txt")
 i_data = std_data(i_data, std_ddof = 1)
 
 
